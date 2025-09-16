@@ -21,4 +21,14 @@ class Shop extends Model
         'price',
         'rate',
     ];
+
+    public function promos()
+    {
+        return $this->hasMany(Promo::class);
+    }
+
+    public function laundries()
+    {
+        return $this->hasMany(Laundry::class);
+    }
 }
