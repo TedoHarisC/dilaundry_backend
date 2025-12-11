@@ -16,4 +16,24 @@ class PromoController extends Controller
             'data' => $promos
         ], 200);
     }
+
+    function readLimit()
+    {
+        $promos  = Promo::orderBy('created_at', 'desc')
+            ->limit(5)
+            ->with('shop')
+            ->get();
+
+        if (count($promos) == 0) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'No promos found'
+            ], 404);
+        } else {
+            return response()->json([
+                'status' => 'success',
+                'data' => $promos
+            ], 200);
+        }
+    }
 }

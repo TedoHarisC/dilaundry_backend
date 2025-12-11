@@ -16,4 +16,42 @@ class ShopController extends Controller
             'data' => $shops
         ], 200);
     }
+
+    function recommendation()
+    {
+        $shops  = Shop::orderBy('rating', 'desc')
+            ->limit(5)
+            ->get();
+
+        if (count($shops) == 0) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'No shops found'
+            ], 404);
+        } else {
+            return response()->json([
+                'status' => 'success',
+                'data' => $shops
+            ], 200);
+        }
+    }
+
+    function searchByCity($city)
+    {
+        $shops  = Shop::where('city', 'like', '%' . $city . '%')
+            ->orderBy('name')
+            ->get();
+
+        if (count($shops) == 0) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'No shops found in the specified city'
+            ], 404);
+        } else {
+            return response()->json([
+                'status' => 'success',
+                'data' => $shops
+            ], 200);
+        }
+    }
 }
