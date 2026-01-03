@@ -4,7 +4,7 @@ namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use Illuminate\Container\Attributes\Auth;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
@@ -98,6 +98,7 @@ class UserController extends Controller
                 'status' => 'success',
                 'access_token' => $token,
                 'token_type' => 'Bearer',
+                'data' => $user
             ], 200);
         }
     }
