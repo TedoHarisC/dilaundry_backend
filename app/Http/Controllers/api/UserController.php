@@ -83,23 +83,32 @@ class UserController extends Controller
         ], 201);
     }
 
-    function login(Request $request)
-    {
-        if (!Auth::attempt($request->only('email', 'password'))) { {
-                return response()->json([
-                    'status' => 'error',
-                    'message' => 'Unauthorized'
-                ], 401);
-            }
-
-            $user = User::where('email', $request->email)->firstOrFail();
-            $token = $user->createToken('auth_token')->plainTextToken;
-            return response()->json([
-                'status' => 'success',
-                'access_token' => $token,
-                'token_type' => 'Bearer',
-                'data' => $user
-            ], 200);
-        }
+    public function login(Request $request)
+{
+    if (!Auth::attempt($request->only('email', 'password'))) {
+        return response()->json([
+            'status' => 'error',
+            'message' => 'Unauthorized'
+        ], 401);
     }
+
+    $user = User::where('email', $request->email)->first();
+
+    if (!$user) {
+        return response()->json([
+            'status' => 'error',
+            'message' => 'User not found'
+        ], 404);
+    }
+
+    $token = $user->createToken('auth_token')->plainTextToken;
+
+    return response()->json([
+        'status' => 'success',
+        'access_token' => $token,
+        'token_type' => 'Bearer',
+        'data' => $user
+    ], 200);
+}
+
 }
